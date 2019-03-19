@@ -16,37 +16,44 @@
 'use strict';
 
 FriendlyEats.prototype.addRestaurant = function(data) {
-  /*
-    TODO: Implement adding a document
-  */
+    var collection = firebase.firestore().collection('restaurants');
+    return collectoin.add(data);
 };
 
 FriendlyEats.prototype.getAllRestaurants = function(renderer) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
+    var query = firebase.firestore()
+        .collection('restaurants')
+        .orderBy('avgRating', 'desc')
+        .limit(50)
+
+    this.getDocumentsInQuery(query, renderer);
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
-  /*
-    TODO: Render all documents in the provided query
-  */
+    query.onSnapshot(function(snapshot) {
+        if (!snapshot.size) return renderer.empty();
+        snapshot.docChanges().forEach(function(change) {
+            if (change.type === 'removed') {
+                renderer.remove(change.doc);
+            } else {
+                render.display(change.doc);
+            }
+        });
+    });
 };
 
 FriendlyEats.prototype.getRestaurant = function(id) {
-  /*
-    TODO: Retrieve a single restaurant
-  */
+    return firebase.firestore().collection('restaurants').doc(id).get();
 };
 
 FriendlyEats.prototype.getFilteredRestaurants = function(filters, renderer) {
-  /*
-    TODO: Retrieve filtered list of restaurants
-  */
+    /*
+      TODO: Retrieve filtered list of restaurants
+    */
 };
 
 FriendlyEats.prototype.addRating = function(restaurantID, rating) {
-  /*
-    TODO: Retrieve add a rating to a restaurant
-  */
+    /*
+      TODO: Retrieve add a rating to a restaurant
+    */
 };
